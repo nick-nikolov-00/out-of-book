@@ -1,0 +1,4 @@
+# Nothing here benefits from being indexed: every page is a view of the same
+# tree, reached from one URL.
+User-agent: *
+Disallow: /

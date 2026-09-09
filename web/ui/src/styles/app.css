@@ -1,0 +1,1358 @@
+:root {
+  --bg: #161513;
+  --bg-panel: #22201d;
+  --bg-raised: #2b2825;
+  --border: #3a3733;
+  --text: #ded9d3;
+  --text-dim: #9a938a;
+  --accent: #629924;
+  --accent-dim: #4b7a1c;
+  --white-win: #e8e4dd;
+  --draw: #8a837b;
+  --black-win: #3d3935;
+  --danger: #cc5b47;
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  font-size: 14px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.app {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(12px, 2.5vw, 20px) max(clamp(12px, 3vw, 24px), env(safe-area-inset-right))
+    calc(48px + env(safe-area-inset-bottom))
+    max(clamp(12px, 3vw, 24px), env(safe-area-inset-left));
+}
+
+/* --- header ---------------------------------------------------------- */
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.app-header-sub {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/* Each view contributes its own controls under the shell header. */
+.view-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* --- view tabs -------------------------------------------------------- */
+
+.tab-bar {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Links, not buttons — so the anchor's own defaults have to be undone, and it
+ * has to be given the box a button would have had. */
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg-panel);
+  padding: 7px 18px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background: var(--bg-raised);
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab.active,
+.tab.active:hover {
+  background: var(--accent-dim);
+  color: #fff;
+}
+
+/* --- analysis side toggle -------------------------------------------- */
+
+.perspective-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perspective-caption {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.perspective-toggle .side {
+  border-radius: 0;
+  padding: 6px 14px;
+  font-size: 12px;
+  background: var(--bg-panel);
+}
+
+.perspective-toggle .side:first-of-type {
+  border-radius: 5px 0 0 5px;
+}
+
+.perspective-toggle .side:last-of-type {
+  border-radius: 0 5px 5px 0;
+}
+
+/* Every button after the first drops its left border, so neighbours share one
+ * line rather than drawing two against each other. */
+.perspective-toggle .side + .side {
+  border-left-width: 0;
+}
+
+/* Active side is painted in its own colour so the answer to "which side am I
+ * analysing for?" survives a glance rather than needing a read. */
+.perspective-toggle .side.w.active {
+  background: var(--white-win);
+  border-color: var(--white-win);
+  color: #14110f;
+  font-weight: 600;
+}
+
+.perspective-toggle .side.b.active {
+  background: #100e0c;
+  border-color: var(--text-dim);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* No colour of its own to be painted in, so it takes the accent both sides
+ * share — the colour it stands for is the one shown beside it. */
+.perspective-toggle .side.random.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.perspective-drawn {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.bucket-selector {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bucket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  padding: 5px 10px;
+  background: var(--bg-panel);
+  line-height: 1.2;
+}
+
+.bucket:last-child {
+  border-right: none;
+}
+
+.bucket.active {
+  background: var(--accent-dim);
+}
+
+.bucket-label {
+  font-size: 12px;
+}
+
+.bucket-games {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.bucket.active .bucket-games {
+  color: #dce8cd;
+}
+
+/* --- layout ---------------------------------------------------------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 520px) minmax(340px, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.board-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* A grid item's automatic minimum size is content-based, and a min beats a
+   * max, so without this the FEN row's intrinsic width sets the column's and
+   * every cap below is ignored. */
+  min-width: 0;
+}
+
+.board-row {
+  display: flex;
+  gap: 10px;
+}
+
+.board-frame {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- eval bar -------------------------------------------------------- */
+
+.eval-bar {
+  position: relative;
+  width: 22px;
+  background: var(--black-win);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.eval-bar.flipped {
+  flex-direction: column;
+}
+
+.eval-bar-white {
+  flex: 0 0 auto;
+  background: var(--white-win);
+  transition: height 180ms ease;
+}
+
+/* Outlined so it stays legible whichever side of the bar it lands on. */
+.eval-bar-value {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4px;
+  text-align: center;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  text-shadow: 0 0 2px #000, 0 0 3px #000;
+}
+
+/* --- controls and move list ------------------------------------------ */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Basis auto rather than zero so the buttons wrap to a second row when the
+ * column is too narrow for six of them, instead of being squeezed until their
+ * labels are clipped. The board column gets narrow on a phone held sideways,
+ * where the board is sized by the height and there is not much of it. */
+.controls button {
+  flex: 1 1 auto;
+}
+
+/* The pair of triangles is one icon, so the gap the font puts between them is
+ * closed up. */
+.controls button.jump {
+  letter-spacing: -0.15em;
+}
+
+/* A link, not a button — so the anchor's own defaults have to be undone and it
+ * has to be given the box the buttons beside it have. */
+.controls .control-link {
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+.controls .control-link:hover {
+  border-color: var(--accent);
+}
+
+.line-navigator {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 8px;
+  min-height: 64px;
+  max-height: 160px;
+  overflow-y: auto;
+  line-height: 1.9;
+}
+
+.line-navigator.empty {
+  color: var(--text-dim);
+}
+
+.ply-group {
+  white-space: nowrap;
+}
+
+.move-number {
+  color: var(--text-dim);
+  margin: 0 2px 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ply {
+  background: none;
+  border: none;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.ply.start {
+  color: var(--text-dim);
+}
+
+.ply.current {
+  background: var(--accent-dim);
+  color: #fff;
+}
+
+.fen-box {
+  display: flex;
+  gap: 6px;
+}
+
+.fen-box input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  padding: 6px 8px;
+  color: var(--text);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.fen-box.invalid input {
+  border-color: var(--danger);
+}
+
+/* --- right-hand panel ------------------------------------------------ */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  /* What decides whether the move table's six columns fit is this panel's
+   * width, which on a tablet in landscape is narrow while the window is not.
+   * Asking the container rather than the viewport gets that case right and
+   * keeps the rule in one place. */
+  container: panel / inline-size;
+}
+
+.banner {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 5px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.banner.error {
+  border-color: var(--danger);
+  color: #f0b7ab;
+}
+
+.loading {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.empty-note {
+  color: var(--text-dim);
+}
+
+/* --- summary --------------------------------------------------------- */
+
+.summary {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px;
+}
+
+.summary-head {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summary-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summary-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.summary-value {
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* On its own in the box there is nothing above it to be separated from. */
+.summary-note:first-child {
+  margin-top: 0;
+}
+
+.summary-note button.link {
+  margin-left: 8px;
+  text-decoration: underline;
+}
+
+.wdl-bar {
+  display: flex;
+  margin-top: 12px;
+  height: 18px;
+  border-radius: 3px;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.wdl {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.wdl.white {
+  background: var(--white-win);
+  color: #14110f;
+}
+
+.wdl.draw {
+  background: var(--draw);
+  color: #14110f;
+}
+
+.wdl.black {
+  background: var(--black-win);
+  color: var(--text);
+}
+
+/* --- move table ------------------------------------------------------ */
+
+.move-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.move-table th {
+  text-align: right;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 500;
+  padding: 8px 10px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.move-table th:first-child {
+  text-align: left;
+}
+
+.move-table th.sorted {
+  color: var(--text);
+}
+
+.sort-arrow {
+  margin-left: 4px;
+  font-size: 9px;
+}
+
+.move-table td {
+  padding: 6px 10px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid rgba(58, 55, 51, 0.5);
+}
+
+.move-table tr:last-child td {
+  border-bottom: none;
+}
+
+.move-table tr.playable {
+  cursor: pointer;
+}
+
+.move-table tr.playable:hover {
+  background: var(--bg-raised);
+}
+
+.move-table tr.pseudo {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.move-cell {
+  text-align: left !important;
+  white-space: nowrap;
+}
+
+.move-san {
+  font-weight: 600;
+  font-style: normal;
+}
+
+.move-table tr.pseudo .move-san {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.best-badge {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--accent-dim);
+  color: #eaf4dd;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+/* The opponent's expectimax pick is still worth marking, but it is not a move
+ * we are choosing, so it does not get the accent colour. */
+.best-badge.theirs {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+/* A move the book will not recommend. Outlined rather than filled, because it
+ * marks a move as not-to-be-played rather than picking one out: the accent
+ * colour belongs to the move the table is recommending, and these two badges
+ * can appear on the same row when the opponent's own best move is a flagged
+ * one. */
+.dubious-badge {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border: 1px solid var(--danger);
+  border-radius: 3px;
+  color: var(--danger);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+}
+
+/* The share bar sits behind the numbers so the column stays readable. */
+.games-cell {
+  position: relative;
+  white-space: nowrap;
+}
+
+.games-count {
+  margin-right: 8px;
+}
+
+.games-share {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.share-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  max-width: 100%;
+}
+
+.eval-cell {
+  font-weight: 600;
+}
+
+.no-eval {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/*
+ * A score with too few games behind it to be ranked on. It is dimmed rather
+ * than hidden because it is the honest number for that move; what it is not is
+ * a reason to play it, and the row order is the tree's rather than the
+ * column's, so the two visibly disagree here and the dimming is the answer.
+ */
+.eval-thin {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+/* The one-line legend under the table that the dimming above refers to. */
+.table-note {
+  margin: 8px 2px 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+/* --- training --------------------------------------------------------- */
+
+/* A fixed slot, so the board never shifts as feedback appears and clears. */
+.feedback {
+  margin: 0;
+  padding: 9px 12px;
+  min-height: 38px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  font-size: 13px;
+}
+
+.feedback.idle {
+  color: var(--text-dim);
+}
+
+.feedback.best,
+.feedback.custom {
+  border-color: var(--accent);
+  color: #cfe6b0;
+}
+
+.feedback.excellent {
+  border-color: var(--accent-dim);
+  color: #c3d6ac;
+}
+
+.feedback.sideline {
+  border-color: #b8862f;
+  color: #e8c77a;
+}
+
+.feedback.suboptimal {
+  border-color: #b8862f;
+  color: #e0c48d;
+}
+
+.feedback.unknown {
+  border-color: var(--danger);
+  color: #f0b7ab;
+}
+
+.feedback.complete {
+  border-color: var(--accent);
+  color: #cfe6b0;
+}
+
+.save-prompt {
+  background: var(--bg-panel);
+  border: 1px solid #b8862f;
+  border-radius: 5px;
+  padding: 12px;
+}
+
+.save-prompt p {
+  margin: 0 0 10px;
+}
+
+.save-prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.save-prompt-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+button.primary {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* --- saved lines ------------------------------------------------------ */
+
+/* The box every maintenance panel behind the debug switch is drawn in, so
+ * adding one is a class rather than a copy of these declarations. */
+.debug-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 12px;
+}
+
+.debug-panel header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+
+.custom-lines ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.custom-lines li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(58, 55, 51, 0.5);
+}
+
+.custom-lines li:last-child {
+  border-bottom: none;
+}
+
+/* The line for the position on the board, so it is findable while training. */
+.custom-lines li.here {
+  color: #cfe6b0;
+}
+
+.line-san {
+  font-weight: 600;
+  min-width: 52px;
+}
+
+.line-meta {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button.link {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+button.link:hover:not(:disabled) {
+  color: var(--text);
+  border-color: transparent;
+}
+
+/* --- collapsed settings ----------------------------------------------- *
+ *
+ * The pill and its sheet are a different control from the inline band row, not
+ * a restyling of it, so only one of the two is ever in the document.
+ */
+
+.bucket-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-panel);
+  line-height: 1.2;
+}
+
+.bucket-pill::after {
+  content: '⌄';
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 0.6;
+  margin-top: -3px;
+}
+
+.bucket-pill[aria-expanded='true'] {
+  border-color: var(--accent);
+}
+
+.bucket-pill-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+.bucket-pill-value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Anchored to the bottom edge rather than centred: this only exists on a
+ * phone, where the bottom of the screen is the half a thumb reaches. */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(0, 0, 0, 0.55);
+  animation: sheet-fade 0.16s ease-out;
+}
+
+.sheet {
+  width: 100%;
+  max-height: 80vh;
+  max-height: 80svh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px calc(18px + env(safe-area-inset-bottom));
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -12px 32px -8px rgba(0, 0, 0, 0.7);
+  animation: sheet-rise 0.2s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sheet-head h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.sheet-close {
+  padding: 4px 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* The bands have room here that they do not have inline, so the labels stop
+ * being the reason the grid needs three rows. */
+.sheet .bucket-selector {
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 6px;
+}
+
+.sheet .bucket {
+  padding: 9px 8px;
+}
+
+.sheet-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+@keyframes sheet-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sheet-rise {
+  from { transform: translateY(14px); }
+  to { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-backdrop,
+  .sheet,
+  .gate-backdrop,
+  .gate {
+    animation: none;
+  }
+}
+
+/* --- first-visit rating band ----------------------------------------- *
+ *
+ * Built like the sheet and placed over it, but centred and with no way out:
+ * the sheet is a control somebody opened, this is a question the site is
+ * asking. The backdrop is opaque enough to read the dialog against and thin
+ * enough that the shell behind is recognisable as the thing being set up.
+ */
+
+.gate-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  background: rgba(10, 9, 8, 0.76);
+  animation: sheet-fade 0.16s ease-out;
+}
+
+.gate {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(16px, 4vw, 24px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 18px 48px -12px rgba(0, 0, 0, 0.8);
+  animation: sheet-rise 0.2s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+/* Focused only to put the caret inside the dialog, which is not something to
+ * draw a ring around. The bands it contains keep theirs. */
+.gate:focus {
+  outline: none;
+}
+
+.gate h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.gate-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+/* Three across for nine bands, so the grid comes out square instead of
+ * leaving a short last row. */
+.gate-bands {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 2px 0;
+}
+
+.gate-band {
+  padding: 11px 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gate-band:hover {
+  background: var(--accent-dim);
+}
+
+/* --- responsive ------------------------------------------------------- *
+ *
+ * The desktop layout above is the wide case; everything below narrows it.
+ * Three things drive the breakpoints rather than device names:
+ *
+ * - the two-column grid stops fitting once the panel is squeezed under its
+ *   340px minimum, which happens a little below 900px;
+ * - the nine-button bucket selector wants about 560px in one row, so once the
+ *   window is under about 760px it becomes a wrapped grid instead;
+ * - the move table's six numeric columns are the last thing to fit, and what
+ *   decides it is the width of the panel rather than of the window, so they are
+ *   asked about with a container query.
+ *
+ * Nothing here hides information. A column that will not fit is made narrower
+ * or stacked, and the table keeps a scroll container of its own as the backstop
+ * for the widths that no amount of narrowing saves — a 320px phone, or a
+ * browser too old for container queries.
+ */
+
+/* Stacked, so the board no longer shares the row and must not simply take the
+ * whole width of a tablet. It is capped against the viewport height too: a
+ * board taller than the screen is one you have to scroll to play on. */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  /* The verdict is last in the column and so inherits the height of everything
+   * above it, which puts it below the fold on a phone. Ordering rather than
+   * moving it in the document keeps one slot and one component, and its
+   * role="status" carries the announcement the reading order no longer does. */
+  .feedback {
+    order: -1;
+  }
+
+  .board-column {
+    width: 100%;
+    /* 250px is what sits above the board here: the header, the collapsed
+     * settings row and the verdict ordered above it. The figure has to track
+     * whatever is actually up there. */
+    max-width: min(100%, 560px, max(220px, calc(100vh - 250px)));
+    max-width: min(100%, 560px, max(220px, calc(100svh - 250px)));
+    margin: 0 auto;
+  }
+}
+
+/* Stacking is a response to a narrow window, and a phone in landscape is not
+ * one: it has width to spare and no height, which is exactly the case the two
+ * columns are good at. The board is capped by height there rather than width. */
+@media (max-width: 900px) and (min-width: 660px) and (max-height: 520px) {
+  .layout {
+    grid-template-columns: min(45%, calc(100vh - 160px)) minmax(280px, 1fr);
+    grid-template-columns: min(45%, calc(100svh - 160px)) minmax(280px, 1fr);
+    gap: 16px;
+  }
+
+  .board-column {
+    max-width: none;
+    margin: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-header {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .view-controls {
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  /* One row of nine does not fit, and scrolling it would hide the bands off the
+   * end behind a gesture nothing on screen suggests. Wrapping keeps all nine
+   * visible for a strip of vertical space. The joined-segment look does not
+   * survive being wrapped, so the group's border moves onto the buttons. */
+  .bucket-selector {
+    flex: 1 1 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 5px;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .bucket {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 8px;
+  }
+
+  .bucket.active {
+    border-color: var(--accent);
+  }
+
+  /* 16px is the threshold below which iOS Safari zooms the page in on focus,
+   * and it does not zoom back out afterwards. */
+  .fen-box input {
+    font-size: 16px;
+  }
+
+  .line-navigator {
+    max-height: 120px;
+    line-height: 1.8;
+  }
+
+  .custom-lines ul {
+    max-height: 150px;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header h1 {
+    font-size: 17px;
+  }
+
+  /* The tab bar is the app's top-level control, so on a phone it gets the whole
+   * width rather than whatever is left beside the title. */
+  .tab-bar {
+    flex: 1 1 100%;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 8px 12px;
+  }
+
+  /* Both settings fit on one line once the bands are collapsed, and giving the
+   * toggle its own row would spend most of what that saved. */
+  .perspective-toggle {
+    flex: 1 1 auto;
+  }
+
+  .perspective-toggle .side {
+    flex: 1;
+  }
+
+  .bucket-pill {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  /* "Training as White" and "Rating 1600-1799" do not both fit on 360px, and
+   * two rows here would spend most of what collapsing the bands just saved.
+   * The band's own value is self-describing in a chess app; the side toggle's
+   * caption is not, so the caption is what stays. */
+  .bucket-pill-label {
+    display: none;
+  }
+
+  /* Two lines' worth, reserved: the verdict sits above the board here, so a
+   * message that wraps and later shrinks back moves the board under the finger
+   * about to tap it. Holding the taller height costs 12px. */
+  .feedback {
+    min-height: 50px;
+  }
+
+  .summary-head {
+    gap: 14px 18px;
+  }
+
+  .summary-value {
+    font-size: 16px;
+  }
+
+  .save-prompt-actions {
+    flex-wrap: wrap;
+  }
+
+  .eval-bar {
+    width: 16px;
+  }
+
+  .eval-bar-value {
+    font-size: 8px;
+  }
+
+  .controls {
+    gap: 4px;
+  }
+
+  .controls button,
+  .controls .control-link {
+    padding: 6px 4px;
+  }
+}
+
+/* Six numeric columns in a panel this narrow. Stacked rather than dropped: the
+ * share is what the Games column is really read for and the count is what makes
+ * it trustworthy, but side by side they are the widest cell in the table by a
+ * distance. One above the other is the smallest change that lets the other five
+ * columns fit, so nothing has to be taken away. */
+@container panel (max-width: 560px) {
+  .move-table th,
+  .move-table td {
+    padding: 6px 5px;
+  }
+
+  .move-table th {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .move-table td {
+    font-size: 12px;
+  }
+
+  .move-cell,
+  .eval-cell {
+    font-size: 13px;
+  }
+
+  .games-cell {
+    line-height: 1.35;
+  }
+
+  .games-count,
+  .games-share {
+    display: block;
+    margin-right: 0;
+  }
+
+  .games-share {
+    font-size: 10px;
+  }
+
+  .col-side {
+    display: none;
+  }
+
+  .best-badge,
+  .dubious-badge {
+    margin-left: 4px;
+    padding: 1px 3px;
+    font-size: 8px;
+  }
+}
+
+/* The last squeeze available before the table has to scroll, and what makes it
+ * fit a 360px phone rather than only a 390px one. */
+@container panel (max-width: 400px) {
+  .move-table th,
+  .move-table td {
+    padding: 6px 3px;
+  }
+}
+
+/* The backstop for what narrowing cannot fix. The table is the only thing in
+ * the app wide enough to need one, and it scrolls inside its own box so the
+ * page itself never does — a horizontally scrolling page moves the board out
+ * from under the finger that is dragging a piece. */
+.table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+/* Touch, not screen size: a mouse hits a 24px row and a finger does not, and
+ * the tablet that needs the bigger targets may be wider than the laptop that
+ * does not. */
+@media (pointer: coarse) {
+  .controls button,
+  .controls .control-link {
+    min-height: 42px;
+  }
+
+  .move-table td {
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+
+  .bucket {
+    min-height: 42px;
+    justify-content: center;
+  }
+
+  .tab,
+  .perspective-toggle .side {
+    min-height: 40px;
+  }
+
+  .custom-lines li {
+    padding: 7px 0;
+  }
+
+  button.link {
+    padding: 4px 8px;
+  }
+
+  .ply {
+    padding: 5px 7px;
+  }
+
+  /* Hover previews the row's move as an arrow on the board. A touch fires it
+   * on the way to a tap, so the arrow appears and then never clears; the row
+   * being tapped plays the move anyway, which is the same information. */
+  .move-table tr.playable:hover {
+    background: none;
+  }
+}
+
+/* A desk monitor has room for a bigger board, which is the one thing in this
+ * app that reads better large. */
+@media (min-width: 1500px) {
+  .app {
+    max-width: 1400px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(420px, 620px) minmax(400px, 1fr);
+    gap: 32px;
+  }
+}

@@ -1,0 +1,6 @@
+.idea
+cmake-*
+build/
+logs*
+
+__pycache__/

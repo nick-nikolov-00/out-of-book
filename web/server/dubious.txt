@@ -1,0 +1,22 @@
+# Moves the book will not recommend, whatever their record says.
+#
+# One entry per line, three fields separated by '|':
+#
+#     <line from the starting position> | <move to flag> | <why>
+#
+# Everything is written in the notation you would say it in, and the server
+# replays each line to find the position, so a move that is not legal where you
+# wrote it stops the server at startup rather than flagging nothing. A move that
+# two pieces could make is refused the same way: write "Nbd2" to say which.
+#
+# The third field is shown on the move in the table, so keep it to a phrase.
+#
+# What flagging does: the move drops to the bottom of the recommended order in
+# every rating bucket, so it can never be the book's pick. It keeps its real
+# share and its real win rates, and it stays exactly where it is in the
+# opponent's half of the table -- you still have to be ready for it.
+#
+# A blank line, or a line starting with '#', is ignored.
+
+d4 g6 | Bh6 | Hangs the bishop; it only scores against a premoved Bg7
+e4 b6 | Ba6 | Hangs the bishop; it only scores against a premoved Bb7

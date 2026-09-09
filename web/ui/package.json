@@ -1,0 +1,28 @@
+{
+  "name": "initium-ui",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --noEmit",
+    "inspect": "node --experimental-strip-types scripts/inspect.mjs"
+  },
+  "dependencies": {
+    "@lichess-org/chessground": "^9.2.1",
+    "chess.js": "^1.4.0",
+    "lru-cache": "^11.5.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.2"
+  }
+}

@@ -1,0 +1,8 @@
+add_subdirectory(ankerl_map)
+add_subdirectory(cache)
+add_subdirectory(chess)
+add_subdirectory(common)
+add_subdirectory(metrics)
+add_subdirectory(mm)
+add_subdirectory(queue)
+add_subdirectory(zst_streamer)
